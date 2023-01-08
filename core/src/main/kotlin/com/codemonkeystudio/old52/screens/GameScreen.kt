@@ -591,11 +591,13 @@ class GameScreen(context: Context) : CringeScreen(context) {
         }
     }
     fun drawBullets() {
-        spriteBatch.use(camera) {
-            for (i in bullets) {
-                it.draw(bulletTexture, i.pos.x, i.pos.y, 50f, 50f)
+        try {
+            spriteBatch.use(camera) {
+                for (i in bullets) {
+                    it.draw(bulletTexture, i.pos.x, i.pos.y, 50f, 50f)
+                }
             }
-        }
+        } catch (e: Exception) {}
     }
     fun drawCrosshair() {
         spriteBatch.use(camera) {
