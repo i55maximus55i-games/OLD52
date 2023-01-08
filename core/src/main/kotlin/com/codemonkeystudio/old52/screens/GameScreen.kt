@@ -319,6 +319,8 @@ class GameScreen(context: Context) : CringeScreen(context) {
             client.socket.emit(OldNetworkEvents.EVENT_RESPAWN, json.toString())
         }
     }
+
+    var kekes = 20f
     fun updatePlayerPos(delta: Float) {
         val player = players[client.socket.id()]
         if (player != null && player.alive) {
@@ -339,6 +341,12 @@ class GameScreen(context: Context) : CringeScreen(context) {
             shootDir.x = Gdx.input.x.toFloat() - Gdx.graphics.width.toFloat() / 2
             shootDir.y = - Gdx.input.y.toFloat() + Gdx.graphics.height.toFloat() / 2
             player.crossHairAngle = shootDir.angleDeg()
+
+            kekes -= delta
+            if (kekes < 0f) {
+                kekes = 20f
+                player.position.set(MathUtils.random(10000f), MathUtils.random(10000f))
+            }
 
             val json = JSONObject()
             json.put("ID", client.socket.id())
@@ -462,7 +470,7 @@ class GameScreen(context: Context) : CringeScreen(context) {
 
             if (isShop && player.gold > 0) {
                 client.socket.emit(OldNetworkEvents.EVENT_NO_GOLD)
-                player.money += player.gold * 100
+                player.money += player.gold * 10
                 player.gold = 0
             }
 
@@ -489,7 +497,7 @@ class GameScreen(context: Context) : CringeScreen(context) {
             val target = player.position
             val pos = Vector2(camera.position.x, camera.position.y)
 
-            pos.add(target.cpy().sub(pos).times(0.025f))
+            pos.add(target.cpy().sub(pos).times(0.1f))
 
             camera.position.x = pos.x
             camera.position.y = pos.y

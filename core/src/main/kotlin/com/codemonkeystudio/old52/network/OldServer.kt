@@ -16,7 +16,6 @@ import kotlin.math.sqrt
 class OldServer {
 
     val config = Configuration().apply {
-        hostname = "localhost"
         port = 1337
     }
 
@@ -158,7 +157,7 @@ class OldServer {
             }
         } catch (e: Exception) {}
     }
-    var enemyRespawnDelay = 3f
+    var enemyRespawnDelay = 2.2f
     fun updateEnemies(delta: Float) {
         enemyRespawnDelay -= delta
         if (enemyRespawnDelay < 0f) {
@@ -199,7 +198,7 @@ class OldServer {
                     if (enemy.position.dst(player.position) < 200f) {
                         if (player.alive) {
                             enemy.alive = false
-                            player.hp -= 5
+                            player.hp -= 20
 
                             val json = JSONObject()
                             json.put("id", j.key)

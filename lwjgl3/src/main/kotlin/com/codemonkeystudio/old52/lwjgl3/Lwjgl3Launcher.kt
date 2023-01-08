@@ -10,7 +10,8 @@ import com.codemonkeystudio.old52.Application
 fun main() {
     Lwjgl3Application(Application(), Lwjgl3ApplicationConfiguration().apply {
         setTitle("OLD52")
-        setWindowedMode(800, 600)
+        val displayMode = Lwjgl3ApplicationConfiguration.getDisplayMode()
+        setFullscreenMode(displayMode)
         setWindowIcon(*(arrayOf(128, 64, 32, 16).map { "libgdx$it.png" }.toTypedArray()))
     })
 }
