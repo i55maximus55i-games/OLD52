@@ -1,0 +1,65 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		maven { url 'https://s01.oss.sonatype.org' }
+		mavenLocal()
+		google()
+		gradlePluginPortal()
+		maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+		maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
+	}
+	dependencies {
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+
+	}
+}
+
+task writeAllAssetsToFile {
+	doLast {
+		// projectfolder/assets
+		def assetsFolder = new File("${project.rootDir}/assets/")
+		// projectfolder/assets/assets.txt
+		def assetsFile = new File(assetsFolder, "assets.txt")
+		// delete that file in case we've already created it
+		assetsFile.delete()
+
+		// iterate through all files inside that folder
+		// convert it to a relative path
+		// and append it to assets.txt the file
+		fileTree(assetsFolder).collect {assetsFolder.relativePath(it) }.each {
+			assetsFile.append(it + "\n")
+		}
+	}
+}
+
+allprojects {
+	apply plugin: 'eclipse'
+	apply plugin: 'idea'
+}
+
+configure(subprojects) {
+	apply plugin: 'java-library'
+	apply plugin: 'kotlin'
+	sourceCompatibility = 1.8
+	compileJava {
+		options.incremental = true
+	}
+
+	compileJava.dependsOn writeAllAssetsToFile
+}
+
+subprojects {
+	version = '1.0.0'
+	ext.appName = 'OLD52'
+	repositories {
+		mavenCentral()
+		maven { url 'https://s01.oss.sonatype.org' }
+		mavenLocal()
+		gradlePluginPortal()
+		maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+		maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
+		maven { url 'https://jitpack.io' }
+	}
+}
+
+eclipse.project.name = 'OLD52' + '-parent'
