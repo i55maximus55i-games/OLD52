@@ -413,9 +413,11 @@ class GameScreen(context: Context) : CringeScreen(context) {
     }
 
     fun updateBulletsPos(delta: Float) {
-        for (bullet in bullets) {
-            bullet.pos.add(Vector2(bullet.speed * delta, 0f).setAngleDeg(bullet.angle))
-        }
+        try {
+            for (bullet in bullets) {
+                bullet.pos.add(Vector2(bullet.speed * delta, 0f).setAngleDeg(bullet.angle))
+            }
+        } catch (e: Exception) {}
     }
     fun updatePlayerList() {
         client.socket.once(OldNetworkEvents.EVENT_GET_PLAYER_LIST) {
@@ -597,7 +599,9 @@ class GameScreen(context: Context) : CringeScreen(context) {
                     it.draw(bulletTexture, i.pos.x, i.pos.y, 50f, 50f)
                 }
             }
-        } catch (e: Exception) {}
+        } catch (e: Exception) {
+        }
+        if (spriteBatch.isDrawing) spriteBatch.end()
     }
     fun drawCrosshair() {
         spriteBatch.use(camera) {
